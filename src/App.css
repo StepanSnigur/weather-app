@@ -1,33 +1,30 @@
-.App {
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:700,400);
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  background: linear-gradient(90deg, #7464bf 10%, #348ac7 90%);
+}
+
+.pageLink {
+  display: block;
+  height: 40px;
+  width: 100%;
+  text-decoration: none;
   text-align: center;
+  line-height: 40px;
+  font-size: 20px;
+  color: #4D4D4D;
+  background: #ddd;
+  margin-top: 40px;
+  margin-bottom: 100px;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+ @media (max-width: 380px) {
+   .pageLink {
+     width: 225px;
+     margin: 40px auto 100px auto;
+   }
+ }
