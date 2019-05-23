@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
+import { connect } from 'react-redux';
 import * as config from "./IconsBase";
 
 import '../App.css';
@@ -121,7 +122,6 @@ class HourlyForecastPage extends Component {
         }
     }
     render() {
-
         let { data } = this.props;
         let forecastDataList = data.list.slice(0, 4);
         let forecastList = forecastDataList.map((el) => {
@@ -153,4 +153,10 @@ class HourlyForecastPage extends Component {
     }
 }
 
-export default HourlyForecastPage;
+let mapStateToProps = ({ weatherForecast }) => {
+    return {
+        data: weatherForecast
+    }
+}
+
+export default connect(mapStateToProps)(HourlyForecastPage);

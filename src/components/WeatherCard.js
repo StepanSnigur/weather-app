@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
+import { connect } from 'react-redux';
 import * as config from "./IconsBase";
 
 import '../App.css';
@@ -142,4 +143,10 @@ class WeatherCard extends Component {
     }
 }
 
-export default WeatherCard;
+let mapStateToProps = ({ weatherForecast }) => {
+    return {
+        data: weatherForecast
+    }
+}
+
+export default connect(mapStateToProps)(WeatherCard);

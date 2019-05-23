@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, HashRouter } from 'react-router-dom';
 import WeatherService from './services/Service';
 import './App.css';
 import styled from 'styled-components';
+import { Provider } from 'react-redux';
+import store from './reducers/Reducer';
 
 import WeatherCard from './components/WeatherCard';
 import HourlyForecastPage from './components/HourlyForecastPage';
@@ -24,22 +26,14 @@ let AppContainer = styled.div`
 
 class App extends Component {
   state = {
-    weatherForecast: {
-      main: {},
-      wind: {},
-      weather: {
-        0: []
-      },
-      list: []
-    },
     isLoading: true,
     error: false
   }
 
   async getForecast (city) {
     let response = await new WeatherService().getWeather(city);
+    store.dispatch({type: 'LOAD_FORECAST', payload: response});
     this.setState({
-      weatherForecast: response,
       isLoading: false
     });
   }
@@ -52,10 +46,6 @@ class App extends Component {
       this.getForecast(city).catch((err) => this.onError(err));
     }
   }
-  prepareComponentToRender = (component) => {
-    let ComponentWithPreloader = this.state.isLoading ? <Preloader /> : component;
-    return this.state.error ? <ErrorIndicator /> : ComponentWithPreloader;
-  }
   onError = (err) => {
     localStorage.removeItem('cityName');
     this.setState({
@@ -63,6 +53,10 @@ class App extends Component {
       loading: false
     });
 
+  }
+  prepareComponentToRender = (component) => {
+    let ComponentWithPreloader = this.state.isLoading ? <Preloader /> : component;
+    return this.state.error ? <ErrorIndicator /> : ComponentWithPreloader;
   }
 
   componentDidMount () {
@@ -74,21 +68,22 @@ class App extends Component {
   }
 
   render() {
-    let data = this.state.weatherForecast;
     return (
-      <Router>
-        <HashRouter>
-          <MainWrapper>
-            <AppContainer>
-              <CityInputBlock onChangeCity={(val) => this.changeCity(val)} />
+      <Provider store={store}>
+        <Router>
+          <HashRouter>
+            <MainWrapper>
+              <AppContainer>
+                <CityInputBlock onChangeCity={(val) => this.changeCity(val)} />
 
-              <Route path="/" exact component={() => this.prepareComponentToRender(<WeatherCard data={data} />)}/>
-              <Route path="/hourlyForecast" component={() => this.prepareComponentToRender(<HourlyForecastPage data={data} />)}/>
+                <Route path="/" exact component={() => this.prepareComponentToRender(<WeatherCard />)}/>
+                <Route path="/hourlyForecast" component={() => this.prepareComponentToRender(<HourlyForecastPage />)}/>
 
-            </AppContainer>
-          </MainWrapper>
-        </HashRouter>
-      </Router>
+              </AppContainer>
+            </MainWrapper>
+          </HashRouter>
+        </Router>
+      </Provider>
     );
   }
 }
