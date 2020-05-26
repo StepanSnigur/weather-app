@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, HashRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import WeatherService from './services/Service';
 import './App.css';
 import styled from 'styled-components';
@@ -10,7 +10,7 @@ import WeatherCard from './components/WeatherCard';
 import HourlyForecastPage from './components/HourlyForecastPage';
 import CityInputBlock from './components/CityInput';
 import Preloader from './components/Preloader/Preloader';
-import ErrorIndicator from './components/ErrorIndicator/ErrorIndicator';
+import ErrorIndicator from './components/ErrorIndicator';
 
 let MainWrapper = styled.div`
   width: 100%;
@@ -41,7 +41,8 @@ class App extends Component {
     if (city) {
       localStorage.setItem('cityName', city);
       this.setState({
-        isLoading: true
+        isLoading: true,
+        error: false
       });
       this.getForecast(city).catch((err) => this.onError(err));
     }
@@ -52,7 +53,6 @@ class App extends Component {
       error: true,
       loading: false
     });
-
   }
   prepareComponentToRender = (component) => {
     let ComponentWithPreloader = this.state.isLoading ? <Preloader /> : component;
@@ -71,17 +71,14 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <HashRouter>
-            <MainWrapper>
-              <AppContainer>
-                <CityInputBlock onChangeCity={(val) => this.changeCity(val)} />
+          <MainWrapper>
+            <AppContainer>
+              <CityInputBlock onChangeCity={(val) => this.changeCity(val)} />
 
-                <Route path="/" exact component={() => this.prepareComponentToRender(<WeatherCard />)}/>
-                <Route path="/hourlyForecast" component={() => this.prepareComponentToRender(<HourlyForecastPage />)}/>
-
-              </AppContainer>
-            </MainWrapper>
-          </HashRouter>
+              <Route path="/" exact component={() => this.prepareComponentToRender(<WeatherCard />)}/>
+              <Route path="/hourlyForecast" component={() => this.prepareComponentToRender(<HourlyForecastPage />)}/>
+            </AppContainer>
+          </MainWrapper>
         </Router>
       </Provider>
     );

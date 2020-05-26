@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { connect } from 'react-redux';
-import * as config from "./IconsBase";
+import * as config from '../IconsBase';
 
 import '../App.css';
 

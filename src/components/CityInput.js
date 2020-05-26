@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import styled from 'styled-components'
+import React from 'react';
+import AlgoliaPlaces from 'algolia-places-react';
+import styled from 'styled-components';
 
-let CityInputWrapper = styled.div`
-    display: flex;
-    justify-content: space-between;
+const CityInputWrapper = styled.div`
     width: 100%;
     height: 40px;
     margin-bottom: 40px;
@@ -14,56 +13,22 @@ let CityInputWrapper = styled.div`
         flex-direction: column;
     }
 `
-let CityInput = styled.input`
-    box-sizing: border-box;
-    width: 80%;
-    height: 100%;
-    font-size: 20px;
-    padding-left: 10px;
-    color: #4D4D4D;
-    outline: none;
-    
-    @media (max-width: 380px) {
-        width: 225px;
-        height: 40px;
-        margin: 0 auto;
-    }
-`
-let CityInputButton = styled.button`
-    border: none;
-    width: 20%;
-    height: 100%;
-    font-size: 20px;
-    color: #4D4D4D;
-    outline: none;
-    cursor: pointer;
-    
-    @media (max-width: 380px) {
-        width: 225px;
-        height: 40px;
-        margin: 0 auto;
-    }
-`
 
-class CityInputBlock extends Component {
-    state = {
-        cityName: ''
-    }
-    setCityName = (e) => {
-        this.setState({
-           cityName: e.target.value
-        });
-    }
-    render() {
-        let { onChangeCity } = this.props;
-        let { cityName } = this.state;
-        return (
-            <CityInputWrapper>
-                <CityInput placeholder="Enter your city" onChange={this.setCityName} />
-                <CityInputButton onClick={() => onChangeCity(cityName)}>Search</CityInputButton>
-            </CityInputWrapper>
-        )
-    }
+const CityInputBlock = ({ onChangeCity }) => {
+    return (
+        <CityInputWrapper>
+            <AlgoliaPlaces
+                placeholder='Write your city here'
+                options={{
+                    appId: 'plSW4AYAD71J',
+                    apiKey: '705a8b96422089d6b9fc5164be4f76ee',
+                    type: 'city'
+                }}
+                onChange={({ suggestion }) => onChangeCity(suggestion.name)}
+                onError={({ message }) => console.log('Error')}
+            />
+        </CityInputWrapper>
+    )
 }
 
 export default CityInputBlock;
